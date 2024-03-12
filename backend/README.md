@@ -1,51 +1,78 @@
-### Как запустить проект:
+![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white) ![DjangoREST](https://img.shields.io/badge/DJANGO-REST-ff1709?style=for-the-badge&logo=django&logoColor=white&color=ff1709&labelColor=gray) ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
-Клонировать репозиторий и перейти в него в командной строке:
+## Описание проекта
 
-```
-git clone https://github.com/yandex-praktikum/kittygram_backend.git
-```
+Сайт с возможностью публикации фотографий котов и их достижений.
 
-```
-cd kittygram_backend
-```
+## Запуск проекта из образов с Docker hub
 
-Cоздать и активировать виртуальное окружение:
+Cоздаём папку проекта `kittygram` и переходим в нее:
 
-```
-python3 -m venv env
+```bash
+mkdir kittygram
+cd kittygram
 ```
 
-* Если у вас Linux/macOS
+В папку проекта копируем (или создаём) файл `docker-compose.production.yml` и запускаем его:
 
-    ```
-    source env/bin/activate
-    ```
-
-* Если у вас windows
-
-    ```
-    source env/scripts/activate
-    ```
-
-```
-python3 -m pip install --upgrade pip
+```bash
+sudo docker compose -f docker-compose.production.yml up
 ```
 
-Установить зависимости из файла requirements.txt:
+Произойдет скачивание образов, создание и включение контейнеров, создание томов и сети.
+
+
+## Запуск проекта из исходников GitHub
+
+Клонируем себе репозиторий: 
+
+```bash 
+git clone git@github.com:rxyal/kittygram_final.git
+```
+
+Выполняем запуск:
+
+```bash
+sudo docker compose -f docker-compose.yml up
+```
+
+## После запуска: Миграции, сбор статистики
+
+После запуска нужно выполнить сбор статистики и миграцию для бэкенда. Статистика фронтенда собирается во время запуска контейнера, после чего он останавливается. 
+
+```bash
+sudo docker compose -f [имя-файла-docker-compose.yml] exec backend python manage.py migrate
+
+sudo docker compose -f [имя-файла-docker-compose.yml] exec backend python manage.py collectstatic
+
+sudo docker compose -f [имя-файла-docker-compose.yml] exec backend cp -r /app/collected_static/. /static/static/
+```
+
+теперь проект доступен на: 
 
 ```
-pip install -r requirements.txt
+http://localhost:9000/
 ```
 
-Выполнить миграции:
+## Описание переменных окружения
 
-```
-python3 manage.py migrate
+Ниже пример файла .env c переменными окружения, необходимыми для запуска приложения
+
+```bash
+POSTGRES_DB=kittygram
+POSTGRES_USER=kittygram_user
+POSTGRES_PASSWORD=kittygram_password
+DB_NAME=kittygram
+DB_HOST=db
+DEBUG=False
+SECRET_KEY=django_secret_key_example
 ```
 
-Запустить проект:
 
-```
-python3 manage.py runserver
+## Остановка оркестра контейнеров
+
+В окне, где был запуск **Ctrl+С** или в другом окне:
+
+```bash
+sudo docker compose -f docker-compose.yml down
 ```
