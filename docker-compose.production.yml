@@ -11,7 +11,9 @@ services:
     env_file: .env
     volumes:
       - pg_data:/var/lib/postgresql/data
+    restart: always
   backend:
+    tags: rxyal/kittygram_backend
     image: rxyal/kittygram_backend
     env_file: .env
     volumes:
@@ -20,6 +22,7 @@ services:
     depends_on:
       - db
   frontend:
+    tags: rxyal/kittygram_backend
     image: rxyal/kittygram_frontend
     env_file: .env
     command: cp -r /app/build/. /frontend_static/

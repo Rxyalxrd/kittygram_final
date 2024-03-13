@@ -1,4 +1,4 @@
 repo_owner: rxyal
 kittygram_domain: https://sprintproject.sytes.net/
-taski_domain: https://sampleproject.ddns.net
-dockerhub_username: rxyal
+taski_domain: https://sampleproject.ddns.net # жалуется, что не может найти какой-то файл для БД, я не знаю, как это пофиксить
+dockerhub_username: rxyal                    # на локал хосте проблем нет, все работает и обрабатывает
