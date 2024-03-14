@@ -13,12 +13,10 @@ services:
       - pg_data:/var/lib/postgresql/data
     restart: always
   backend:
-    tags: rxyal/kittygram_backend
-    image: rxyal/kittygram_backend
+    image: rxyal/kittygram_backend:latest
     env_file: .env
     volumes:
-      - static:/backend_static/
-      - media:/media/
+      - media:/var/www/kittygram/media
     depends_on:
       - db
   frontend:
@@ -33,7 +31,7 @@ services:
     env_file: .env
     volumes:
       - static:/staticfiles/
-      - media:/media/
+      - media:/var/www/kittygram/media
     depends_on:
       - backend
       - frontend
