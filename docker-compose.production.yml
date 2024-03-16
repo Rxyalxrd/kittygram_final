@@ -15,23 +15,25 @@ services:
   backend:
     image: rxyal/kittygram_backend:latest
     env_file: .env
-    volumes:
-      - media:/var/www/kittygram/media
+    volumes:      
+      - static:/backend_static/
+      - media:/media/
+    restart: always
     depends_on:
       - db
   frontend:
-    tags: rxyal/kittygram_backend
-    image: rxyal/kittygram_frontend
+    image: rxyal/kittygram_backend:latest
     env_file: .env
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - static:/frontend_static/
   gateway:
-    image: rxyal/kittygram_gateway
+    image: rxyal/kittygram_gateway:latest
     env_file: .env
     volumes:
       - static:/staticfiles/
-      - media:/var/www/kittygram/media
+      - media:/media/
+    restart: always
     depends_on:
       - backend
       - frontend
